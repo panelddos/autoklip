@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Auto Video Clipper — Potong Video Viral Otomatis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Gradient Animation -->
+    <div class="bg-gradient"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">✂️</span>
+                <h1>Auto Video <span class="gradient-text">Clipper</span></h1>
+            </div>
+            <p class="tagline">Tempel link YouTube → Dapatkan klip viral otomatis dengan subtitle! 🚀</p>
+        </header>
+
+        <!-- Input Section -->
+        <section class="input-section glass-card">
+            <div class="input-group">
+                <div class="input-wrapper">
+                    <span class="input-icon">🔗</span>
+                    <input
+                        type="url"
+                        id="youtubeUrl"
+                        placeholder="Paste link YouTube di sini... (contoh: https://youtube.com/watch?v=...)"
+                        autocomplete="off"
+                    >
+                    <button id="pasteBtn" class="paste-btn" title="Paste dari clipboard">📋</button>
+                </div>
+            </div>
+
+            <!-- Settings Toggle -->
+            <div class="settings-toggle" id="settingsToggle">
+                <span>⚙️ Pengaturan Lanjutan</span>
+                <span class="arrow">▼</span>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div class="settings-panel" id="settingsPanel">
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label>⏱️ Durasi Minimum</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="minDuration" min="10" max="30" value="15">
+                            <span id="minDurationVal">15 detik</span>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label>⏱️ Durasi Maksimum</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="maxDuration" min="30" max="180" value="90" step="10">
+                            <span id="maxDurationVal">90 detik</span>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label>📊 Jumlah Klip Maks</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="maxClips" min="1" max="10" value="5">
+                            <span id="maxClipsVal">5 klip</span>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label>📐 Format Video</label>
+                        <div class="format-options">
+                            <button class="format-btn active" data-value="true" id="formatVertical">
+                                📱 9:16 Vertical
+                            </button>
+                            <button class="format-btn" data-value="false" id="formatOriginal">
+                                🖥️ Original
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <button id="clipBtn" class="clip-button">
+                <span class="btn-icon">✂️</span>
+                <span class="btn-text">Mulai Clipping!</span>
+            </button>
+        </section>
+
+        <!-- Progress Section -->
+        <section class="progress-section glass-card" id="progressSection" style="display:none;">
+            <div class="progress-header">
+                <div class="spinner"></div>
+                <h3 id="progressTitle">Sedang Memproses...</h3>
+            </div>
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <span class="progress-percent" id="progressPercent">0%</span>
+            </div>
+            <p class="progress-message" id="progressMessage">⏳ Memulai proses...</p>
+
+            <!-- Steps Indicator -->
+            <div class="progress-steps">
+                <div class="step" id="step1"><span class="step-icon">📋</span> Analisis</div>
+                <div class="step" id="step2"><span class="step-icon">📥</span> Download</div>
+                <div class="step" id="step3"><span class="step-icon">📝</span> Subtitle</div>
+                <div class="step" id="step4"><span class="step-icon">🧠</span> Deteksi</div>
+                <div class="step" id="step5"><span class="step-icon">✂️</span> Potong</div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection" style="display:none;">
+            <!-- Video Info -->
+            <div class="video-info glass-card" id="videoInfo">
+                <h3>🎬 <span id="videoTitle"></span></h3>
+                <div class="video-meta">
+                    <span>⏱️ Durasi: <strong id="videoDuration"></strong></span>
+                    <span>✂️ Klip: <strong id="totalClips"></strong></span>
+                </div>
+            </div>
+
+            <!-- Clips Grid -->
+            <div class="clips-grid" id="clipsGrid">
+                <!-- Klip akan di-render di sini via JavaScript -->
+            </div>
+
+            <!-- Download All -->
+            <div class="actions-bar">
+                <button class="action-btn secondary" id="newClipBtn">
+                    🔄 Proses Video Lain
+                </button>
+            </div>
+        </section>
+
+        <!-- Error Section -->
+        <section class="error-section glass-card" id="errorSection" style="display:none;">
+            <div class="error-icon">😵</div>
+            <h3 id="errorTitle">Oops! Terjadi Kesalahan</h3>
+            <p id="errorMessage"></p>
+            <button class="action-btn primary" id="retryBtn">🔄 Coba Lagi</button>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Made with ❤️ — 100% Gratis & Open Source</p>
+            <p class="footer-note">⚠️ Gunakan dengan bijak. Hormati hak cipta konten kreator.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+  </html>
