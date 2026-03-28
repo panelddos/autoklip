@@ -5,4 +5,6 @@ venv/
 .env
 *.mp4
 *.mkv
+*.mov
 clips/
+node_modules/
