@@ -7,7 +7,7 @@
 // Configuration
 // ============================================================
 
-const API_BASE = "https://autoklip-production.up.railway.app";
+const API_BASE = "https://autoklipgratis.up.railway.app";
 
 const POLL_INTERVAL = 2000; // Cek status setiap 2 detik
 
