@@ -91,22 +91,12 @@ class VideoClipper:
                 "yt-dlp",
                 "--dump-json",
                 "--no-download",
+                "--no-check-certificate", # Tambahkan ini
+                "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", # Tambahkan ini
                 url
             ]
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-            if result.returncode == 0:
-                import json
-                info = json.loads(result.stdout)
-                return {
-                    "title": info.get("title", "Unknown"),
-                    "duration": info.get("duration", 0),
-                    "channel": info.get("channel", "Unknown"),
-                    "view_count": info.get("view_count", 0),
-                }
-        except Exception as e:
-            print(f"⚠️ Error getting video info: {e}")
-
-        return {"title": "Unknown", "duration": 0, "channel": "Unknown", "view_count": 0}
+            # ... sisanya sama
 
     def _download_video(self, url: str, video_id: str) -> Optional[str]:
         """Download video dari YouTube"""
