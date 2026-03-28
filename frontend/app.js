@@ -7,9 +7,7 @@
 // Configuration
 // ============================================================
 
-const API_BASE = window.location.hostname === 'localhost'
-    ? 'http://localhost:8000'
-    : '';  // Sama domain jika di-deploy bareng
+const API_BASE = "autoklip-production.up.railway.app";
 
 const POLL_INTERVAL = 2000; // Cek status setiap 2 detik
 
