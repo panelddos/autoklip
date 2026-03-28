@@ -6,9 +6,13 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
     git \
+    && pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu \
+    && apt-get purge -y --auto-remove build-essential gcc git \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
 # Upgrade pip & setuptools sebelum install requirements
 COPY backend/requirements.txt .
