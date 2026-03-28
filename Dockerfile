@@ -11,7 +11,7 @@ COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy folder backend ke dalam container
-COPY backend/ ./backend/
+COPY backend/
 
 RUN mkdir -p clips
 
