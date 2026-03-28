@@ -86,6 +86,10 @@ class VideoClipper:
         return str(uuid.uuid4())[:11]
 
     def _get_video_info(self, url: str) -> dict:
+        """Dapatkan info video (judul, durasi, dll)"""
+        # Mendapatkan path absolut ke cookies.txt di folder yang sama dengan clipper.py
+        cookie_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cookies.txt")
+        
         try:
             cmd = [
                 "yt-dlp",
@@ -93,11 +97,17 @@ class VideoClipper:
                 "--no-download",
                 "--no-check-certificate",
                 "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                url
             ]
+
+            # Tambahkan cookies jika file ada
+            if os.path.exists(cookie_path):
+                cmd.extend(["--cookies", cookie_path])
+            
+            cmd.append(url)
+            
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
             if result.returncode == 0:
-                # Kita sudah import json di atas, jadi langsung pakai
+                import json
                 info = json.loads(result.stdout)
                 return {
                     "title": info.get("title", "Unknown"),
@@ -107,15 +117,20 @@ class VideoClipper:
                 }
         except Exception as e:
             print(f"⚠️ Error getting video info: {e}")
+
         return {"title": "Unknown", "duration": 0, "channel": "Unknown", "view_count": 0}
 
     def _download_video(self, url: str, video_id: str) -> Optional[str]:
+        """Download video dari YouTube"""
         output_path = os.path.join(self.temp_dir, f"{video_id}.mp4")
+        cookie_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cookies.txt")
 
         if os.path.exists(output_path):
+            print("📦 Video sudah ada di cache, skip download")
             return output_path
 
         try:
+            print(f"📥 Downloading video (max {self.video_quality}p)...")
             cmd = [
                 "yt-dlp",
                 "-f", f"bestvideo[height<={self.video_quality}][ext=mp4]+bestaudio[ext=m4a]/best[height<={self.video_quality}][ext=mp4]/best",
@@ -124,18 +139,25 @@ class VideoClipper:
                 "--force-ipv4",
                 "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
                 "-o", output_path,
-                url
             ]
+
+            # Gunakan cookies jika tersedia
+            if os.path.exists(cookie_path):
+                print("🍪 Menggunakan cookies.txt")
+                cmd.extend(["--cookies", cookie_path])
             
-            # Pakai os.environ langsung (karena os sudah diimport di paling atas file)
+            cmd.append(url)
+            
             current_env = os.environ.copy()
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=300, env=current_env)
 
             if result.returncode == 0 and os.path.exists(output_path):
+                print("✅ Video berhasil di-download!")
                 return output_path
             else:
-                print(f"❌ Download gagal: {result.stderr}") 
+                print(f"❌ Download gagal: {result.stderr}")
                 return None
+
         except Exception as e:
             print(f"❌ Error download: {e}")
             return None
