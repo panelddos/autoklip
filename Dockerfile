@@ -1,15 +1,15 @@
 FROM python:3.11-slim
 
-# 1. Install dependencies sistem + NodeJS (untuk JS Runtime yt-dlp)
+# Update sistem dan install dependencies awal
 RUN apt-get update && apt-get install -y \
     ffmpeg \
-    nodejs \
     build-essential \
     gcc \
     git \
     curl \
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
