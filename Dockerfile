@@ -32,4 +32,4 @@ RUN mkdir -p clips && chmod -R 777 clips
 EXPOSE 8000
 
 # 6. Jalankan aplikasi
-CMD uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
